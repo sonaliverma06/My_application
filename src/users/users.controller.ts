@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Req } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Res, Req, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { Request, Response } from 'express';
-// import { Controller, Get, Post, Delete, Req, Res, Put } from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
+import { AllowUnauthorized } from 'src/auth/decorators/allow-unauthorized';
 
 // import { CreateUserDto } from './dto/create-user.dto';
 
@@ -16,8 +16,8 @@ export class UsersController {
       .create(req, res)
       .then((result) => {
         console.log('result', result);
-        
-        res.send(result)
+
+        res.send(result);
       })
       .catch((err) => {
         res.send(err);
@@ -25,22 +25,76 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Req() req: Request, @Res() res: Response) {
+    return this.usersService
+      .findAll(req, res)
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  findOne(@Req() req: Request, @Res() res: Response) {
+    return this.usersService
+      .findOne(req.params.id)
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @Put(':id')
+  update(@Req() req: Request, @Res() res: Response) {
+    return this.usersService
+      .update(req.params.id, req.body)
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  remove(@Req() req: Request, @Res() res: Response) {
+    return this.usersService
+      .remove(req.params.id)
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  }
+
+  @AllowUnauthorized()
+  @Post('register')
+  registeruser(@Req() req: Request, @Res() res: Response) {
+    this.usersService
+      .registerUser(req, res)
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  }
+
+  @AllowUnauthorized()
+  @Post('login')
+  signIn(@Req() req: Request, @Res() res: Response) {
+    this.usersService
+      .signIn(req, res)
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
   }
 }

@@ -1,14 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Delete,
-  Req,
-  Res,
-  Put,
-} from '@nestjs/common';
+import { Controller, Get, Post, Delete, Req, Res, Put } from '@nestjs/common';
 import { UserRoleService } from './user-role.service';
 import { Request, Response } from 'express';
+import { AllowUnauthorized } from 'src/auth/decorators/allow-unauthorized';
 
 @Controller('user-role')
 export class UserRoleController {
@@ -26,6 +19,7 @@ export class UserRoleController {
       });
   }
 
+  @AllowUnauthorized()
   @Get()
   findAll(@Req() req: Request, @Res() res: Response) {
     return this.userRoleService
@@ -39,7 +33,7 @@ export class UserRoleController {
   }
 
   @Get(':id')
-  findOne (@Req() req: Request, @Res() res: Response) {
+  findOne(@Req() req: Request, @Res() res: Response) {
     return this.userRoleService
       .findOne(req.params.id)
       .then((result) => {
@@ -51,16 +45,15 @@ export class UserRoleController {
   }
 
   @Put(':id')
-   update( @Req() req: Request, @Res() res: Response,
-  ) {
-     return this.userRoleService
-       .update(req.params.id, req.body)
-       .then((result) => {
-         res.send(result);
-       })
-       .catch((err) => {
-         res.send(err);
-       });
+  update(@Req() req: Request, @Res() res: Response) {
+    return this.userRoleService
+      .update(req.params.id, req.body)
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
   }
 
   @Delete(':id')
@@ -75,6 +68,3 @@ export class UserRoleController {
       });
   }
 }
-
-
-
