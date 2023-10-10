@@ -7,6 +7,7 @@ import { AllowUnauthorized } from 'src/auth/decorators/allow-unauthorized';
 export class UserRoleController {
   constructor(private readonly userRoleService: UserRoleService) {}
 
+  @AllowUnauthorized()
   @Post()
   create(@Req() req: Request, @Res() res: Response) {
     return this.userRoleService
@@ -31,7 +32,7 @@ export class UserRoleController {
         res.send(err);
       });
   }
-
+  @AllowUnauthorized()
   @Get(':id')
   findOne(@Req() req: Request, @Res() res: Response) {
     return this.userRoleService
@@ -43,7 +44,7 @@ export class UserRoleController {
         res.send(err);
       });
   }
-
+  @AllowUnauthorized()
   @Put(':id')
   update(@Req() req: Request, @Res() res: Response) {
     return this.userRoleService
@@ -54,8 +55,9 @@ export class UserRoleController {
       .catch((err) => {
         res.send(err);
       });
-  }
-
+    }
+    
+  @AllowUnauthorized()
   @Delete(':id')
   async remove(@Req() req: Request, @Res() res: Response) {
     return this.userRoleService

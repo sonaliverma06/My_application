@@ -8,9 +8,11 @@ import {
   ForeignKey,
   BelongsTo,
   Scopes,
+  HasMany,
 } from 'sequelize-typescript';
 import { UserRoleModel } from 'src/user-role/model/user-role.model';
 import { Gender } from '../user.constants';
+import { ProductModel } from 'src/product/model/product.model';
 
 @Scopes({
   user_roles: () => {
@@ -111,6 +113,9 @@ export class UserModel extends Model<UserModel> {
     field: 'user_role_id',
   })
   user_role_id: string;
+
+  @HasMany(() => ProductModel)
+  products: ProductModel[];
 
   @BelongsTo(() => UserRoleModel)
   user_roles: UserRoleModel;

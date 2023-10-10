@@ -59,8 +59,7 @@ export class UserRoleService {
       findRole.role = body.role;
       findRole.status = body.status;
       await this.userRoleModel.update(findRole.dataValues, { where: { id } });
-
-      return findRole;
+       return findRole;
     }
 
   }

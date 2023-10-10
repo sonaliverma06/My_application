@@ -1,15 +1,12 @@
 import { Controller, Get, Post, Delete, Res, Req, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Request, Response } from 'express';
-import { AuthService } from 'src/auth/auth.service';
 import { AllowUnauthorized } from 'src/auth/decorators/allow-unauthorized';
-
-// import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
+  @AllowUnauthorized()
   @Post()
   create(@Req() req: Request, @Res() res: Response) {
     return this.usersService
@@ -23,7 +20,7 @@ export class UsersController {
         res.send(err);
       });
   }
-
+  @AllowUnauthorized()
   @Get()
   findAll(@Req() req: Request, @Res() res: Response) {
     return this.usersService
@@ -35,7 +32,7 @@ export class UsersController {
         res.send(err);
       });
   }
-
+  @AllowUnauthorized()
   @Get(':id')
   findOne(@Req() req: Request, @Res() res: Response) {
     return this.usersService
@@ -47,7 +44,7 @@ export class UsersController {
         res.send(err);
       });
   }
-
+  @AllowUnauthorized()
   @Put(':id')
   update(@Req() req: Request, @Res() res: Response) {
     return this.usersService

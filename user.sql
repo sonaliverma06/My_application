@@ -27,3 +27,18 @@ CREATE TABLE users(
   FOREIGN KEY(user_role_id)
   REFERENCES user_roles(id)
 )
+
+CREATE TABLE products(
+  id uuid DEFAULT uuid_generate_v4(),
+  name VARCHAR NOT NULL,
+  price VARCHAR NOT NULL,
+  image VARCHAR NOT NULL,
+  quantity VARCHAR NOT null,
+  category VARCHAR NOT null,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  users_id uuid,
+  PRIMARY KEY(id),
+  FOREIGN KEY(users_id)
+  REFERENCES users(id)
+)

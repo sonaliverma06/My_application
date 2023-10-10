@@ -155,17 +155,14 @@ export class UsersService {
       where: { email, password },
     });
     if (!findUser) {
-      throw new ConflictException('Invalid login');
+      throw new NotFoundException('Invalid login');
     } else {
-      const userlogin = new UserModel();
-      userlogin.email = req.body.email;
-      userlogin.password = req.body.password;
-      userlogin.user_role_id = req.body.user_role_id;
-      const token = await this.authService.createAccessToken({
-        
-      });
-      const entryDone = await this.userModel.create(userlogin.dataValues);
-      return entryDone;
-    }
+      
+     const token = await this.authService.createAccessToken({
+        email:findUser.dataValues.email,
+        sub:findUser.dataValues.id
+      })
+       return{ user:findUser,token}       
+     }
   }
 }
