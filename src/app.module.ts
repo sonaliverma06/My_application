@@ -7,6 +7,8 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProductModule } from './product/product.module';
+import { CategoriesModule } from './categories/categories.module';
+import { SubcategoryModule } from './subcategory/subcategory.module';
 import * as Validation from '@hapi/joi';
 @Module({
   imports: [
@@ -32,13 +34,15 @@ import * as Validation from '@hapi/joi';
       port: 5432,
       username: 'postgres',
       password: 'root',
-      database: 'sonali_pagal',
+      database: 'sonali',
       autoLoadModels: true,
       // synchronize: true,
     }),
     UsersModule,
     AuthModule,
     ProductModule,
+    CategoriesModule,
+    SubcategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -34,18 +34,15 @@ export class UsersService {
         throw new NotFoundException(`${req.body.user_role} doesnot exists`);
       } else {
         const contactNumberPattern = /^\d{10}$/;
-
         if (!contactNumberPattern.test(req.body.contact_number)) {
           throw new BadRequestException(
             'Invalid contact number format. It should be a 10-digit number.',
           );
         }
         const enterUser = new UserModel();
-        enterUser.first_name = req.body.first_name;
-        enterUser.last_name = req.body.last_name;
+        enterUser.name = req.body.name;
         enterUser.email = req.body.email;
         enterUser.contact_number = req.body.contact_number;
-        enterUser.zip_code = req.body.zip_code;
         enterUser.state = req.body.state;
         enterUser.city = req.body.city;
         enterUser.password = req.body.password;
@@ -81,18 +78,15 @@ export class UsersService {
     if (!finduser) {
       throw new NotFoundException(`Post with ID ${body} not found`);
     } else {
-      finduser.first_name = body.first_name;
-      finduser.last_name = body.last_name;
+      finduser.name = body.name;
       finduser.email = body.email;
       finduser.contact_number = body.contact_number;
-      finduser.zip_code = body.zip_code;
       finduser.state = body.state;
       finduser.city = body.city;
       finduser.password = body.password;
       finduser.gender = body.gender;
       finduser.address = body.address;
       await this.userModel.update(finduser.dataValues, { where: { id } });
-
       return finduser;
     }
   }
@@ -110,33 +104,26 @@ export class UsersService {
   }
 
   async registerUser(req: Request, res: Response) {
+    
     const findemail = await this.userModel.findOne({
       where: { email: req.body.email },
     });
-
-    if (findemail) {
+   
+    if (findemail !== null) {
       throw new ConflictException(`${req.body.email} already exists`);
     } else {
+      console.log("hello")
       const findRole = await this.userRoleModel.findOne({
-        where: { role: req.body.user_role },
+        where: { role: req.body.user_role},
       });
-
+      console.log('findRole', findRole);
       if (!findRole) {
         throw new NotFoundException(`${req.body.user_role} doesnot exists`);
       } else {
-        const contactNumberPattern = /^\d{10}$/;
-
-        if (!contactNumberPattern.test(req.body.contact_number)) {
-          throw new BadRequestException(
-            'Invalid contact number format. It should be a 10-digit number.',
-          );
-        }
         const newregister = new UserModel();
-        newregister.first_name = req.body.first_name;
-        newregister.last_name = req.body.last_name;
+        newregister.name = req.body.name;
         newregister.email = req.body.email;
         newregister.contact_number = req.body.contact_number;
-        newregister.zip_code = req.body.zip_code;
         newregister.state = req.body.state;
         newregister.city = req.body.city;
         newregister.password = req.body.password;
@@ -144,15 +131,19 @@ export class UsersService {
         newregister.gender = req.body.gender;
         newregister.address = req.body.address;
         const entryDone = await this.userModel.create(newregister.dataValues);
+        console.log('newregister', entryDone);
         return entryDone;
+        
       }
     }
   }
 
   async signIn(req: Request, res: Response) {
     const { email, password } = req.body;
+    console.log(' req.bodyhhhhhhhhhhhhhhhhh', req.body);
+    
     const findUser = await this.userModel.findOne({
-      where: { email, password },
+      where: { email: req.body.email, password: req.body.password },
     });
     if (!findUser) {
       throw new NotFoundException('Invalid login');

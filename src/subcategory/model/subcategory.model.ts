@@ -8,30 +8,16 @@ import {
   ForeignKey,
   BelongsTo,
   Scopes,
-  HasMany,
-  BelongsToMany,
 } from 'sequelize-typescript';
 import { CategoriesModel } from 'src/categories/model/categories.model';
-import { UserModel } from 'src/users/model/users.model';
-import { ProductCategoriesModel } from './products_categories.model';
+
 
 @Scopes({
-  users: () => {
-    return {
-      include: {
-        model: UserModel,
-        as: 'users',
-        attributes: {
-          exclude: ['created_at', 'updated_at'],
-        },
-      },
-    };
-  },
-  mix_categories: () => {
+  categories: () => {
     return {
       include: {
         model: CategoriesModel,
-        as: 'mix_categories',
+        as: 'categories',
         attributes: {
           exclude: ['created_at', 'updated_at'],
         },
@@ -39,8 +25,8 @@ import { ProductCategoriesModel } from './products_categories.model';
     };
   },
 })
-@Table({ modelName: 'products' })
-export class ProductModel extends Model<ProductModel> {
+@Table({ modelName: 'subcategories' })
+export class SubcategoryModel extends Model<SubcategoryModel> {
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV1,
@@ -60,30 +46,32 @@ export class ProductModel extends Model<ProductModel> {
     type: DataType.STRING,
     allowNull: false,
   })
-  price: string;
+  image: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  image: string;
+  valueinfo: string;
 
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  description: string;
   @CreatedAt
   created_at?: Date;
 
   @UpdatedAt
   updated_at?: Date;
 
-  @ForeignKey(() => UserModel)
+  @ForeignKey(() => CategoriesModel)
   @Column({
-    field: 'users_id',
+    type: DataType.UUID,
+    allowNull: false,
+    field: 'categories_id',
   })
-  users_id: string;
-
-  @BelongsTo(() => UserModel)
-  users: UserModel;
-
-
-  @BelongsToMany(() => CategoriesModel, () => ProductCategoriesModel)
-  mix_categories: CategoriesModel[];
+  categories_id: string;
+  @BelongsTo(() => CategoriesModel)
+  categories: CategoriesModel;
 }

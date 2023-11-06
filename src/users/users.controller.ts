@@ -6,6 +6,35 @@ import { AllowUnauthorized } from 'src/auth/decorators/allow-unauthorized';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @AllowUnauthorized()
+  @Post('register/user')
+  registeruser(@Req() req: Request, @Res() res: Response) {
+    this.usersService
+      .registerUser(req, res)
+      .then((result) => {
+        console.log('register', result);
+
+        res.send(result);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  }
+
+  @AllowUnauthorized()
+  @Post('login')
+  signIn(@Req() req: Request, @Res() res: Response) {
+    this.usersService
+      .signIn(req, res)
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  }
+
   @AllowUnauthorized()
   @Post()
   create(@Req() req: Request, @Res() res: Response) {
@@ -61,32 +90,6 @@ export class UsersController {
   remove(@Req() req: Request, @Res() res: Response) {
     return this.usersService
       .remove(req.params.id)
-      .then((result) => {
-        res.send(result);
-      })
-      .catch((err) => {
-        res.send(err);
-      });
-  }
-
-  @AllowUnauthorized()
-  @Post('register')
-  registeruser(@Req() req: Request, @Res() res: Response) {
-    this.usersService
-      .registerUser(req, res)
-      .then((result) => {
-        res.send(result);
-      })
-      .catch((err) => {
-        res.send(err);
-      });
-  }
-
-  @AllowUnauthorized()
-  @Post('login')
-  signIn(@Req() req: Request, @Res() res: Response) {
-    this.usersService
-      .signIn(req, res)
       .then((result) => {
         res.send(result);
       })

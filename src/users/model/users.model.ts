@@ -42,13 +42,8 @@ export class UserModel extends Model<UserModel> {
     type: DataType.STRING,
     allowNull: false,
   })
-  first_name: string;
+  name: string;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  last_name: string;
 
   @Column({
     type: DataType.STRING,
@@ -87,12 +82,6 @@ export class UserModel extends Model<UserModel> {
     allowNull: false,
   })
   gender: Gender;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  zip_code: string;
 
   @Column({
     type: DataType.STRING,

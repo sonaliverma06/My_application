@@ -5,33 +5,32 @@ import {
   DataType,
   CreatedAt,
   UpdatedAt,
-  ForeignKey,
-  BelongsTo,
   Scopes,
   HasMany,
   BelongsToMany,
-} from 'sequelize-typescript';
-import { CategoriesModel } from 'src/categories/model/categories.model';
-import { UserModel } from 'src/users/model/users.model';
-import { ProductCategoriesModel } from './products_categories.model';
+}from 'sequelize-typescript';
+import { ProductModel } from 'src/product/model/product.model';
+import { ProductCategoriesModel } from 'src/product/model/products_categories.model';
+import { SubcategoryModel } from 'src/subcategory/model/subcategory.model';
+
 
 @Scopes({
-  users: () => {
+  subcategory: () => {
     return {
       include: {
-        model: UserModel,
-        as: 'users',
+        model: SubcategoryModel,
+        as: 'sub_categories',
         attributes: {
           exclude: ['created_at', 'updated_at'],
         },
       },
     };
   },
-  mix_categories: () => {
+  mix_products: () => {
     return {
       include: {
-        model: CategoriesModel,
-        as: 'mix_categories',
+        model: ProductModel,
+        as: 'mix_products',
         attributes: {
           exclude: ['created_at', 'updated_at'],
         },
@@ -39,8 +38,8 @@ import { ProductCategoriesModel } from './products_categories.model';
     };
   },
 })
-@Table({ modelName: 'products' })
-export class ProductModel extends Model<ProductModel> {
+@Table({ modelName: 'categories' })
+export class CategoriesModel extends Model<CategoriesModel> {
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV1,
@@ -60,30 +59,28 @@ export class ProductModel extends Model<ProductModel> {
     type: DataType.STRING,
     allowNull: false,
   })
-  price: string;
+  image: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  image: string;
+  valueinfo: string;
 
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  description: string;
   @CreatedAt
   created_at?: Date;
 
   @UpdatedAt
   updated_at?: Date;
 
-  @ForeignKey(() => UserModel)
-  @Column({
-    field: 'users_id',
-  })
-  users_id: string;
+  @HasMany(() => SubcategoryModel)
+  sub_categories: SubcategoryModel[];
 
-  @BelongsTo(() => UserModel)
-  users: UserModel;
-
-
-  @BelongsToMany(() => CategoriesModel, () => ProductCategoriesModel)
-  mix_categories: CategoriesModel[];
+  @BelongsToMany(() => ProductModel, () => ProductCategoriesModel)
+  mix_products: ProductModel[];
 }

@@ -1,34 +1,29 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Delete,
-  Req,
-  Res,
-  Put,
-} from '@nestjs/common';
-import { ProductService } from './product.service';
-import { Request, Response} from 'express';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Res, Put } from '@nestjs/common';
+import { SubcategoryService } from './subcategory.service';
+import { Request, Response } from 'express';
 import { AllowUnauthorized } from 'src/auth/decorators/allow-unauthorized';
-@Controller('product')
-export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+@Controller('subcategory')
+export class SubcategoryController {
+  constructor(private readonly subcategoryService: SubcategoryService) {}
+
   @AllowUnauthorized()
   @Post()
   create(@Req() req: Request, @Res() res: Response) {
-    return this.productService
+    return this.subcategoryService
       .create(req, res)
       .then((result) => {
+        console.log('result', result);
+
         res.send(result);
       })
       .catch((err) => {
-        // res.send(err);
+        res.send(err);
       });
   }
   @AllowUnauthorized()
   @Get()
   findAll(@Req() req: Request, @Res() res: Response) {
-    return this.productService
+    return this.subcategoryService
       .findAll(req, res)
       .then((result) => {
         res.send(result);
@@ -40,7 +35,7 @@ export class ProductController {
   @AllowUnauthorized()
   @Get(':id')
   findOne(@Req() req: Request, @Res() res: Response) {
-    return this.productService
+    return this.subcategoryService
       .findOne(req.params.id)
       .then((result) => {
         res.send(result);
@@ -49,40 +44,25 @@ export class ProductController {
         res.send(err);
       });
   }
-
   @AllowUnauthorized()
   @Put(':id')
   update(@Req() req: Request, @Res() res: Response) {
-    return this.productService
+    return this.subcategoryService
       .update(req.params.id, req.body)
-      .then((response) => {
-        res.send(response);
+      .then((result) => {
+        res.send(result);
       })
       .catch((err) => {
         res.send(err);
       });
   }
-
   @AllowUnauthorized()
   @Delete(':id')
   remove(@Req() req: Request, @Res() res: Response) {
-    return this.productService
+    return this.subcategoryService
       .remove(req.params.id)
-      .then((response) => {
-        res.send(response);
-      })
-      .catch((err) => {
-        res.send(err);
-      });
-  }
-
-  @AllowUnauthorized()
-  @Post('add_categories')
-  addProduct(@Req() req: Request, @Res() res: Response){
-    return this.productService
-      .addProduct(req,res)
-      .then((response) => {
-        res.send(response);
+      .then((result) => {
+        res.send(result);
       })
       .catch((err) => {
         res.send(err);
@@ -90,4 +70,4 @@ export class ProductController {
   }
 }
 
- 
+
