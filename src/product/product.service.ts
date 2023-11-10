@@ -26,7 +26,7 @@ export class ProductService {
     private productCategoriesModel: typeof ProductCategoriesModel,
   ) {}
   async create(req: Request, res: Response) {
-
+    
     
     const findUser = await this.userModel.findOne({
       where: { email: req.body.email },
