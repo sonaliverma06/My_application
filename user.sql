@@ -90,4 +90,3 @@ CREATE TABLE booking_table(
   REFERENCES users(id)
 )
 
-

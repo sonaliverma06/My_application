@@ -14,7 +14,7 @@ export class CategoriesService {
   ) {}
 
   async create(req: Request, res: Response) {
-    console.log('req.body', req.body);
+    console.log('req.bodybfgbdffgndmfgndmgn', req.body);
     
     const findCategories = await this.categoriestModel.findOne({
       where: { valueinfo: req.body.valueinfo },
@@ -31,6 +31,8 @@ export class CategoriesService {
       const entryDone = await this.categoriestModel.create(
       enterCategories.dataValues,
       );
+      console.log('entryDone', entryDone);
+      
       return entryDone;
     }
   }

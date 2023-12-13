@@ -19,6 +19,8 @@ export class CategoriesController {
       })
       .catch((err) => {
         res.send(err);
+        console.log('  res.send(err);',  res.send(err));
+        
       });
   }
   @AllowUnauthorized()

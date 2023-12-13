@@ -4,7 +4,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UserModel } from './model/users.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { Request, Response } from 'express';
@@ -104,17 +103,16 @@ export class UsersService {
   }
 
   async registerUser(req: Request, res: Response) {
-    
     const findemail = await this.userModel.findOne({
       where: { email: req.body.email },
     });
-   
+
     if (findemail !== null) {
       throw new ConflictException(`${req.body.email} already exists`);
     } else {
-      console.log("hello")
+      console.log('hello');
       const findRole = await this.userRoleModel.findOne({
-        where: { role: req.body.user_role},
+        where: { role: req.body.user_role },
       });
       console.log('findRole', findRole);
       if (!findRole) {
@@ -133,27 +131,25 @@ export class UsersService {
         const entryDone = await this.userModel.create(newregister.dataValues);
         console.log('newregister', entryDone);
         return entryDone;
-        
       }
     }
   }
 
   async signIn(req: Request, res: Response) {
     const { email, password } = req.body;
-    console.log(' req.bodyhhhhhhhhhhhhhhhhh', req.body);
-    
+    console.log(' req.bodyhhhh', req.body);
+
     const findUser = await this.userModel.findOne({
       where: { email: req.body.email, password: req.body.password },
     });
     if (!findUser) {
       throw new NotFoundException('Invalid login');
     } else {
-      
-     const token = await this.authService.createAccessToken({
-        email:findUser.dataValues.email,
-        sub:findUser.dataValues.id
-      })
-       return{ user:findUser,token}       
-     }
+      const token = await this.authService.createAccessToken({
+        email: findUser.dataValues.email,
+        sub: findUser.dataValues.id,
+      });
+      return { user: findUser, token };
+    }
   }
 }
